@@ -2616,7 +2616,7 @@ addEventListener('pointerdown',()=>{if(sndPref&&!AU.ctx)setSound(true);else if(A
 window.__G=G;window.__D={street,flatMap,odomMap,libraryMap,printMap,edgeMap,fireMap,setMap,G,SY,DOOR,facadeBottom};window.__T={G,interact,byId,nearest};
 setMode('title');requestAnimationFrame(frame);
 
-window.HARLEM_FORM={"url":"https://docs.google.com/forms/d/e/1FAIpQLSean6VG-2TLgNEq_X6mURzYm5g4zehtizIjwX2LLWt6t4V0Mw/viewform","note":"entry.2067555535","details":"entry.1925456666"};window.HARLEM_VERSION="55";
+window.HARLEM_FORM={"url":"https://docs.google.com/forms/d/e/1FAIpQLSean6VG-2TLgNEq_X6mURzYm5g4zehtizIjwX2LLWt6t4V0Mw/viewform","note":"entry.2067555535","details":"entry.1925456666"};window.HARLEM_VERSION="56";
 /* ================= 3D BRIDGE =================
    The story engine above (the 2D game's six chapters) keeps running unchanged and owns all game state. This layer
    draws it in 3D: every map change sends the map to Unity (rooms, walls, furniture, blocks, plus two paintings of
@@ -3089,7 +3089,7 @@ function u3start(){
     sk.onclick=()=>{sk.hidden=true;document.body.classList.add('no3d');U3TL.btns.forEach(b=>{b.disabled=false;b.removeAttribute('aria-disabled');b.classList.remove('wait');});
       U3TL.msg.textContent='Ready on the map. 3D loading in the background…';const f=document.getElementById('start');if(f)try{f.focus({preventScroll:true});}catch(e){}};}
   // the data file ships in parts (each under the host's per-file limit); join them into one blob first
-  const N=4,TOTAL=45311661;const got=new Array(N).fill(0);let unityP=0;
+  const N=4,TOTAL=45311848;const got=new Array(N).fill(0);let unityP=0;
   const show=()=>{const dl=Math.min(1,got.reduce((a,b)=>a+b,0)/TOTAL);u3tl(0.85*dl+0.15*unityP,dl<1?'Loading Harlem… downloading':'Loading Harlem… starting up');};
   const grab=i=>fetch('Build/data'+(i+1)+'.br.wasm').then(async r=>{if(!r.ok)throw new Error('HTTP '+r.status);
     if(!r.body||!r.body.getReader)return r.arrayBuffer();const rd=r.body.getReader(),chunks=[];for(;;){const {done,value}=await rd.read();if(done)break;chunks.push(value);got[i]+=value.length;show();}
