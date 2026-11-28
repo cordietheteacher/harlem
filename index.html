@@ -1122,7 +1122,7 @@ function flatMap(opts){opts=opts||{};const rooms=[
   const m={zoom:1.45,id:'flat'+(opts.night?'n':'')+(opts.party?'p':''),w:1160,h:700,rooms,props:[],solids:[],lights:[],night:!!opts.night};
   // hallway connecting parlor down to Haynes's door
   rooms.push({id:'hall',x:740,y:470,w:150,h:70,floor:P.floor2,wall:'#c8b38a'});
-  m.walls=wallsFrom(rooms,doors.concat([{x:735,y:440,w:60,h:40},{x:880,y:470,w:30,h:70}]));m.solids.push(...m.walls);
+  m.walls=wallsFrom(rooms,doors.concat([{x:735,y:440,w:60,h:40},{x:880,y:470,w:30,h:70},{x:730,y:410,w:175,h:30}]));m.solids.push(...m.walls);
   // stairs on the landing
   m.props.push({type:'box',x:60,y:560,w:120,h:0,d:150,top:'#6b4428',deco:(g,b)=>{for(let i=0;i<10;i++){g.fillStyle=i%2?'#7a5236':'#6b4428';g.fillRect(b.x,b.y-150+i*15,b.w,15);}g.fillStyle='#3a2216';g.fillRect(b.x+b.w-6,b.y-150,6,150);}});
   m.solids.push({x:60,y:410,w:120,h:100});
@@ -1202,7 +1202,7 @@ function fireMap(){const m={zoom:1.45,id:'fire',w:900,h:500,props:[],solids:[],l
     g.fillStyle='#17130f';g.fillRect(160,240,580,8);g.fillRect(160,330,580,6);for(let x=160;x<=740;x+=8)g.fillRect(x,240,2,92);g.fillRect(160,240,4,96);g.fillRect(736,240,4,96);
     g.strokeStyle='#17130f';g.lineWidth=3;g.beginPath();g.moveTo(680,336);g.lineTo(760,480);g.stroke();},
   over:(g)=>{g.fillStyle='rgba(23,19,15,.85)';g.fillRect(160,330,580,4);}};
-  m.solids.push({x:0,y:0,w:900,h:262},{x:0,y:318,w:900,h:200},{x:0,y:0,w:170,h:500},{x:730,y:0,w:170,h:500});
+  m.solids.push({x:0,y:0,w:900,h:254},{x:0,y:326,w:900,h:200},{x:0,y:0,w:162,h:500},{x:738,y:0,w:162,h:500});
   return m;}
 streetMap(); // fills DOOR
 
@@ -1373,7 +1373,7 @@ CH[1]=async function(){
   addNote('garvey');
   // ---------- 1.5 THE HEM ----------
   await fade(1);clock('Wednesday · 9:30 p.m.');setMap(flatMap({night:1}),[330,445,'d']);G.player.carry={draw:g=>{g.fillStyle='#7f8fa6';g.fillRect(-10,-6,20,10);}};
-  npc('idella','idella',330,540,'d');npc('vera','vera',330,460,'d',{vis:false});
+  npc('idella','idella',385,535,'l');npc('vera','vera',330,460,'d',{vis:false});
   await fade(0);objective('Take the blanket to the back bedroom',{x:330,y:500});
   await reach(280,470,120,60);G.player.carry=null;byId('vera').vis=true;byId('vera').x=G.player.x+30;byId('vera').y=G.player.y-20;
   {const _i=byId('idella');if(_i){_i.x=346;_i.y=520;_i.dir='r';_i.seat=1;_i.seatH=48;}G.player.x=385;G.player.y=478;G.player.dir='d';if(typeof u3await==='function')u3await();}await sleep(300);
@@ -1403,7 +1403,7 @@ CH[1]=async function(){
     spot('tin',840,432,'The flat tin under the china cabinet',async()=>{removeSpot('tin');searched++;tinSeen=true;if(typeof u3items==='function')u3items('tinfind');
       await narr('Not the rent tin. A flat old tin, the kind cough drops come in. A birth certificate, Pop\'s Pullman Company badge, a small printed card, and a newspaper clipping folded very small.');
       await say('cal','"Brotherhood of Sleeping Car Porters..." Pop\'s not in a...','whispering, reading slowly, puzzled');
-      const v=npc('vera','vera',560,330,'r');await walk('vera',[[800,440]],120);
+      const v=npc('vera','vera',560,330,'r');await walk('vera',[[715,445],[760,445],[800,440]],120);
       await say('vera','Put that back.','very low, very fast, more frightened than angry');
       await say('cal','I was looking for...','startled');
       await say('vera','I know what you were looking for. That\'s your father\'s business. Nobody outside this house knows that card exists. Nobody. Not Skeets, not your cousin, not Mr. Pike. You understand me? The Pullman Company finds that card, your father has no job.','crossing the room, taking the card out of his hand herself and putting it back in the box');
@@ -1411,7 +1411,7 @@ CH[1]=async function(){
       await say('vera','Go to sleep, Calvin.','the fear going out of her, tired now');
       if(G.flags.gasTaken&&!G.flags.gasOwned){const c=await ask('cal','',['"Mama. I took the gas money. Fifty cents."','Say nothing']);if(c===0){G.flags.gasOwned=1;G.flags.veraStraight=1;await say('vera','Then put it in the tin and write it down. Gas on Tuesday.','tired, but it counts');}}
       await narr('She takes the clipping out of the box as she goes, almost without thinking, and then puts it back. A narrow column of newsprint, a poem, folded small.');
-      walk('vera',[[560,330]],120).then(()=>removeEnt('vera'));
+      walk('vera',[[760,445],[715,445],[560,330]],120).then(()=>removeEnt('vera'));
       done();},46).mark=true;
     {const sl=spot('sleep',728,314,'Lie down on your pallet and sleep',async()=>{done();},54);if(sl)sl.mark=true;}
   });
@@ -1420,8 +1420,8 @@ CH[1]=async function(){
   await fade(1);await card({k:'Wednesday',t:'Rent due Monday: $24.00',b:'Put by: '+$fmt(G.money)+'. Thursday: three things to do before dark.',say:'Thursday. Three things to do before dark.'});
 };
 // the landing with Mr. Crane (1.2); withIdella when she came up with Cal
-async function landing(withIdella){setMap(flatMap(),[120,470,'u']);G.player.x=125;G.player.y=440;
-  const c=npc('crane','crane',150,300,'d');if(withIdella)npc('idella','idella',90,480,'u');
+async function landing(withIdella){setMap(flatMap(),[130,385,'u']);G.player.x=130;G.player.y=385;
+  const c=npc('crane','crane',150,300,'d');if(withIdella)npc('idella','idella',85,385,'u');
   await fade(0);clock('Wednesday · 5:15 p.m.');if(typeof u3beat==='function')await u3beat('crane',150,300,2600,1.9);
   await say('crane','Calvin. Good afternoon. Your mother\'s still at the shop?','pleasant, mild, a man who is used to being polite at doorways');
   await say('cal','Till seven.','wary, stopping two steps below him');if(typeof u3beat==='function')await u3beat('crane',150,300,2000,1.9);
@@ -1435,7 +1435,7 @@ async function landing(withIdella){setMap(flatMap(),[120,470,'u']);G.player.x=12
   else if(ch===1){G.flags.craneManner='pushed';await say('cal','Rent\'s gone up twice since Easter.','hot, a bit louder than he means');
     await say('crane','It has. And there are four families on this block who\'d pay what it is now, today, to have this door. I\'m not telling you that to be hard. I\'m telling you because it\'s the arithmetic, and a man ought to know the arithmetic.','not offended at all, as if Cal had made a fair point about the weather');}
   else{G.flags.craneManner='silent';sfx('door');await say('crane','Monday, Calvin.','to Cal\'s back, unruffled');}
-  await walk('crane',[[120,520]],70);removeEnt('crane');
+  await walk('crane',[[195,330],[195,398]],70);removeEnt('crane');
   await narr('On the second-floor landing he tips his hat to a door that has opened two inches. It closes again.');
   G.flags.rentShown=1;addMoney(0,null,null,true);moneyHud();toast('RENT DUE MONDAY: $24.00',4000);}
 // Day 1 night: the quiet flat (3D edition). Returns a handle with .stop(); onCaught runs once if Cal moves while Vera is listening.
@@ -1479,7 +1479,7 @@ CH[2]=async function(){const f=G.flags;
   await say('cal','Survey for who?','half awake, suspicious');
   await say('lyle','For the people who live in them. We\'re trying to prove what everybody already knows. That Harlem pays more rent than anybody in this city, for less.','ready for that');
   await say('cal','Five minutes.','a slow, sideways look, deciding');
-  await walk('lyle',[[420,258]],90);G.player.x=366;G.player.y=292;G.player.dir='r';
+  await walk('lyle',[[424,346]],90);G.player.x=366;G.player.y=346;G.player.dir='r';
   await say('lyle','Rooms?','pencil moving, brisk');await say('cal','Five.','plain');
   await say('lyle','Rent, monthly?','brisk');await say('cal','Fifty-five. It was forty-five at Easter.','hesitates, then adds it');
   await say('lyle','Of course it was. And how many people live here? Everybody who sleeps here.','writing, not looking up, a little grim');
@@ -1681,7 +1681,7 @@ CH[3]=async function(){const f=G.flags;
   await card({k:'Harlem, New York',t:'Friday, June 25, 1926',b:'Rent due Monday. Put by: '+$fmt(G.money)+'.',art:{sky:'day'}});
   // ---------- 3.0 THE SHIPS ----------
   clock('Friday · 6:50 a.m.');setMap(flatMap(),[400,370,'u']);setMusic('quiet');
-  npc('pike','pike',462,290,'l');npc('idella','idella',300,220,'r');npc('vera','vera',560,200,'u');
+  npc('pike','pike',462,290,'l');npc('idella','idella',300,220,'r');npc('vera','vera',582,252,'u');
   await fade(0);
   await say('idella','Mr. Pike. What Mr. Garvey wrote. About the millions coming. Is that ships? He had ships, didn\'t he? Somebody at home had a picture. A big ship with his flag.','pouring his coffee, curious, the question she has been holding all night');
   await say('pike','The Black Star Line. Yes. He had ships.','even, careful, his hands stopping on his boot laces');
@@ -1716,7 +1716,7 @@ CH[3]=async function(){const f=G.flags;
   await reach(1300,250,40,450).then(()=>{objective('Walk west along 119th to the building at the end of the block',{x:930,y:470});bark('idella','It\'s quiet.','low, quiet, noticing');});
   setTimeout(()=>bark(G.player,'It\'s a park.','a little too loud, covering'),1800);
   await reach(900,250,60,450);byId('bench').dir='r';byId('door').dir='r';bark('idella','He\'s looking.','barely moving her lips, as the man on the bench lowers his newspaper');setTimeout(()=>bark(G.player,'Let him look.','not looking'),1800);
-  byId('w1').wander=0;byId('w1').path=[[300,640]];
+  byId('w1').wander=0;byId('w1').path=[[300,584]];
   objective('Ask about the flat','sup');await talkTo('sup','Ask about the flat');
   await say('sup','Help you?','not hostile, not friendly, the flat patience of a man who has done this before');
   await say('cal','Good afternoon. We\'re asking about the flat. Five rooms and bath? My mother...','holding up the paper, using his best voice');
@@ -1777,7 +1777,7 @@ CH[3]=async function(){const f=G.flags;
       await say('vera','July 1919, your father was working a train into Washington. The night it started, the porters were told to stay in the cars. Didn\'t matter. Some of them got off. He doesn\'t talk about it. He cut that out of the paper the week he got home. He reads The Messenger now, and his union. And he thinks Mr. Pike\'s man is a fraud.','a long pause, looking at the window, then a dry look');
       await say('cal','Fighting back.','quiet, looking down at the poem');}}
   await say('vera','Put it back when you\'re done. And Calvin. Whatever you tell Mr. Pike tonight, your father comes home Sunday.','standing up, not unkind');
-  walk('vera',[[380,260]],100);
+  walk('vera',[[380,246]],100);
   await narr('From the kitchen: "No, no, child. You don\'t drown it. Less mayonnaise. Little bit of mustard." Cal folds the clipping and, instead of putting it back, puts it in his shirt pocket.');
   f.clipping='cal';source('mckay','"If We Must Die," Claude McKay, 1919','WHO: Claude McKay, a Jamaican-born poet in New York. WHEN: the summer of 1919, the Red Summer. FOR WHOM: first a white radical magazine, then every Black paper in the country; it never names race, and everyone knew who it meant. WHY Pop kept it: he was a porter on a train into Washington when the violence started.');
   // ---------- 3.6 PIKE'S ANSWER ----------
@@ -1988,7 +1988,7 @@ CH[4]=async function(){const f=G.flags;
   await card({k:'214 West 133rd Street',t:'Saturday night',b:'A quarter at the door. Rent due Monday: $24.00. Put by: '+$fmt(G.money)+'.',say:'Saturday night.',art:{sky:'night'}});
 };
 /* ---------- 4.2 MRS. ODOM ---------- */
-async function odomScene(withI){const f=G.flags;await fade(1);setMap(odomMap(),[320,400,'u']);const od=npc('odom','odom',330,260,'d');if(withI)npc('idella','idella',380,400,'u');await fade(0);
+async function odomScene(withI){const f=G.flags;await fade(1);setMap(odomMap(),[320,400,'u']);const od=npc('odom','odom',330,260,'d');if(withI)npc('idella','idella',405,384,'u');await fade(0);
   await say('odom','Come in. Wipe your feet.','cool, precise, a Virginia voice with a church on top of it');
   if(f.tone==='low-down')await say('odom','"I got the Weary Blues." Under my door. On a Saturday. Before the Lord\'s day.','reading from the card, every word a small stone');
   else if(f.tone==='respectable')await say('odom','Psalm one-thirty-three. I\'ll grant you that\'s clever. It\'s still a rent party.','a small, unwilling softening');
@@ -2042,13 +2042,13 @@ function partyEnter(spawn){const f=G.flags;const m=flatMap({night:1,party:1});m.
   npc('vera','vera',300,220,'r');if(f.reese==='playing'||PT.reeseCame)npc('reese','reese',822,262,'u');
   npc('idella','idella',PT.idella==='door'?175:440,PT.idella==='door'?370:230,'d',{spec:Object.assign({},spec('idella'),{apron:'#ece5d2'})});
   if(PT.hughes){npc('hughes','hughes',780,300,'l');npc('douglas','douglas',650,262,'d');}
-  if(PT.schomburg){npc('schomburg','schomburg',700,190,'u');npc('mrss','mrsschomburg',740,200,'u');}
+  if(PT.schomburg){npc('schomburg','schomburg',718,205,'u');npc('mrss','mrsschomburg',752,205,'u');}
   if(PT.odom)npc('odom','odom',700,250,'d');
   if(f.chairs==='yes')for(let i=0;i<8;i++)G.map.props.push({type:'box',x:570+i*36,y:446,w:22,h:10,d:10,top:'#8a5a36',solid:false});
   // guests
   const R=rng(55);const kinds=['churchlady','poolman','clerk','garveyite','dancer','heckler','customer','stoopwoman'];
-  for(let i=0;i<Math.min(28,PT.guests);i++){const k=kinds[Math.floor(R()*kinds.length)];const x=560+R()*300,y=200+R()*230;const s=Object.assign({},spec(k),{skin:['#8a5a3c','#6b412a','#9a6544','#5a3725','#4a2d1e','#a87652','#7b4b31'][i%7]});npc('g'+i,k,x,y,'d',{spec:s,ghost:true,solid:false,wander:22,home:[x,y],guest:1});}
-  for(let i=0;i<Math.min(6,PT.line.length);i++){const s=Object.assign({},spec(PT.line[i].who));npc('l'+i,PT.line[i].who,110,380+i*28,'u',{spec:s,ghost:true,solid:false,badge:PT.line[i].bad?'trouble':null});}
+  for(let i=0;i<Math.min(28,PT.guests);i++){const k=kinds[Math.floor(R()*kinds.length)];const [x,y]=pSpot(R);const s=Object.assign({},spec(k),{skin:['#8a5a3c','#6b412a','#9a6544','#5a3725','#4a2d1e','#a87652','#7b4b31'][i%7]});npc('g'+i,k,x,y,'d',{spec:s,ghost:true,solid:false,wander:11,home:[x,y],guest:1});}
+  for(let i=0;i<Math.min(6,PT.line.length);i++){const s=Object.assign({},spec(PT.line[i].who));npc('l'+i,PT.line[i].who,110,390-i*28,'u',{spec:s,ghost:true,solid:false,badge:PT.line[i].bad?'trouble':null});}
   // stations
   spot('sdoor',PS.door[0],PS.door[1],'Door: take a quarter',async()=>doorAct(false),30).mark=true;
   spot('sfull',PS.door[0]-40,PS.door[1]+40,'Door: say "Full up" and smile',async()=>doorAct(true),26);
@@ -2059,7 +2059,8 @@ function partyEnter(spawn){const f=G.flags;const m=flatMap({night:1,party:1});m.
 function spawnGuest(){const f=G.flags;const c=f.crowd&&typeof f.crowd==='object'?f.crowd:{church:2,pool:2,library:2,garvey:2};const tot=c.church+c.pool+c.library+c.garvey||1;let r=Math.random()*tot;let z='library';for(const k in c){if((r-=c[k])<0){z=k;break;}}
   const who={church:'churchlady',pool:'poolman',library:'clerk',garvey:'garveyite'}[z];const bad=Math.random()<(z==='pool'?0.18:0.06);PT.line.push({who:bad?'heckler':who,bad,z});
   if(!PT.ev['arr'+z]){PT.ev['arr'+z]=1;const L={church:['Good evening. Is this Mrs. Mayfield\'s? Oh my.','polite, inspecting, seeing the red bulb'],pool:['Where\'s the music? Somebody said music!','loud, cheerful, already loose'],library:['Is this the one on the card with the poem?','young, a little shy'],garvey:['Good evening, young man. A quarter, I believe.','formal, removing his hat']}[z];
-    const e=npc('arr'+z,who,120,400,'u',{ghost:true,solid:false});setTimeout(()=>removeEnt('arr'+z),3000);bark(e,L[0],L[1]);}}
+    const e=npc('arr'+z,who,120,392,'u',{ghost:true,solid:false});setTimeout(()=>removeEnt('arr'+z),3000);bark(e,L[0],L[1]);}}
+function pSpot(rnd){const f=G.flags;let best=null;for(let t=0;t<150;t++){const x=560+rnd()*300,y=200+rnd()*230;if(f.chairs==='yes'&&y>414)continue;let ok=true;for(const s of G.map.solids){if(!s.off&&x+20>s.x&&x-20<s.x+s.w&&y+20>s.y&&y-20<s.y+s.h){ok=false;break;}}if(!ok)continue;if(!best)best=[x,y];for(const o of G.ents){if(o!==G.player&&o.vis!==false&&Math.hypot(o.x-x,o.y-y)<(t<100?34:28)){ok=false;break;}}if(ok)return [x,y];}return best||[720,300];}
 let pAcc=0,spawnAcc=0,kitAcc=0;
 function partyTick(dt){const f=G.flags;const rate=FAST?40:(easy()?0.36:0.43); // game minutes per real second
   const dm=dt*rate;PT.min+=dm;pAcc+=dm;
@@ -2083,9 +2084,9 @@ function partyTick(dt){const f=G.flags;const rate=FAST?40:(easy()?0.36:0.43); //
   // guests leave when the mood is low
   if(PT.mood<20&&PT.guests>0&&Math.random()<dm*0.2)PT.guests--;
   // visible crowd follows the count
-  const vis=G.ents.filter(e=>e.guest);if(vis.length<Math.min(28,PT.guests)){const x=560+Math.random()*300,y=200+Math.random()*230;const k=['churchlady','poolman','clerk','garveyite','dancer','heckler'][Math.floor(Math.random()*6)];npc('g'+Math.random(),k,x,y,'d',{spec:Object.assign({},spec(k)),ghost:true,solid:false,wander:22,home:[x,y],guest:1});}
+  const vis=G.ents.filter(e=>e.guest);if(vis.length<Math.min(28,PT.guests)){const [x,y]=pSpot(Math.random);const k=['churchlady','poolman','clerk','garveyite','dancer','heckler'][Math.floor(Math.random()*6)];npc('g'+Math.random(),k,x,y,'d',{spec:Object.assign({},spec(k)),ghost:true,solid:false,wander:11,home:[x,y],guest:1});}
   else if(vis.length>PT.guests+1)removeEnt(vis[0].id);
-  const lineEnts=G.ents.filter(e=>/^l\d/.test(e.id));if(lineEnts.length!==Math.min(6,PT.line.length)){lineEnts.forEach(e=>removeEnt(e.id));for(let i=0;i<Math.min(6,PT.line.length);i++)npc('l'+i,PT.line[i].who,110,380+i*28,'u',{spec:Object.assign({},spec(PT.line[i].who)),ghost:true,solid:false,badge:PT.line[i].bad?'trouble':null});}
+  const lineEnts=G.ents.filter(e=>/^l\d/.test(e.id));if(lineEnts.length!==Math.min(6,PT.line.length)){lineEnts.forEach(e=>removeEnt(e.id));for(let i=0;i<Math.min(6,PT.line.length);i++)npc('l'+i,PT.line[i].who,110,390-i*28,'u',{spec:Object.assign({},spec(PT.line[i].who)),ghost:true,solid:false,badge:PT.line[i].bad?'trouble':null});}
   if(!PT.ev.full&&PT.guests>=cap()-2){PT.ev.full=1;bark(G.ents.find(e=>e.guest)||p,'There\'s no room to move in here! Good!','laughing');}
   // Hughes barks when Cal passes
   if(PT.hughes&&!G.busy){const h=byId('hughes');if(h&&Math.hypot(h.x-p.x,h.y-p.y)<70&&!PT.ev.h1){PT.ev.h1=1;bark(h,'You\'ve got every kind of Harlem in one room. Nobody downtown would believe it.','pleased, nodding at the crowd');}
@@ -2126,7 +2127,7 @@ CH[5]=async function(){const f=G.flags;Object.assign(PT,{min:0,mood:30,noise:10,
     if(at(45)&&!PT.ev.hughes){PT.ev.hughes=1;await run(scHughes);}
     if(at(60)&&!PT.ev.pike1&&f.pike==='room'){PT.ev.pike1=1;await run(scPikeRoom);}
     if(at(75)&&!PT.ev.pike2&&f.pike!=='room'){PT.ev.pike2=1;await run(scPikeFloor);}
-    if(at(80)&&!PT.ev.schom&&f.schomburg==='stayed'){PT.ev.schom=1;PT.schomburg=true;npc('schomburg','schomburg',700,190,'u');npc('mrss','mrsschomburg',740,200,'u');PT.guests+=2;addMoney(50,null,null,true);
+    if(at(80)&&!PT.ev.schom&&f.schomburg==='stayed'){PT.ev.schom=1;PT.schomburg=true;npc('schomburg','schomburg',718,205,'u');npc('mrss','mrsschomburg',752,205,'u');PT.guests+=2;addMoney(50,null,null,true);
       if((f.odomL||0)>=1&&!PT.odom){odomStep(1);PT.odom=f.odomL>=3;toast('Mr. Schomburg went down to bring Mrs. Odom up.',3000);if(PT.odom)npc('odom','odom',700,250,'d');}}
     if(PT.wantS&&!PT.ev.s2){PT.ev.s2=1;await run(async()=>{await say('schomburg','Your father keeps Booker T. Washington and Du Bois on the same shelf. He\'s a diplomat.','amused, impressed, hands behind his back at the bookshelf');await say('cal','He says they\'re both right half the time.','laughing');await say('schomburg','Then he\'s a historian. Which half?','delighted');});}
     if(at(60)&&!PT.ev.odomc&&f.odomComes&&!PT.odom){PT.ev.odomc=1;PT.odom=true;npc('odom','odom',700,250,'d');toast('Mrs. Odom has come up. She takes the good chair by the window.',3500);f.odomL=3;f.odom='ally';}
@@ -2139,7 +2140,7 @@ CH[5]=async function(){const f=G.flags;Object.assign(PT,{min:0,mood:30,noise:10,
   await scMidnight();
 };
 async function scHughes(){const f=G.flags;if(f.hughes!=='coming'){const e=npc('clk','clerk',140,370,'u',{ghost:true});PT.guests++;addMoney(25,null,null,true);bark(e,'Somebody said Langston Hughes might be at a party on a Hundred and Thirty-Third tonight. Must be a different one.','a bit disappointed');setTimeout(()=>removeEnt('clk'),3500);return;}
-  const h=npc('hughes','hughes',140,380,'u');const d=npc('douglas','douglas',110,410,'u');G.player.x=220;G.player.y=330;G.player.dir='l';
+  const h=npc('hughes','hughes',140,380,'u');const d=npc('douglas','douglas',100,384,'u');G.player.x=220;G.player.y=330;G.player.dir='l';
   await say('hughes','Mayfield. Everybody. A quarter each. He\'s not running a charity.','warm, delighted, a little out of breath from the stairs, pressing a quarter into Cal\'s hand, then holding out his palm to his friends');
   addMoney(175);PT.guests+=7;PT.hughes=true;
   h.x=600;h.y=300;d.x=650;d.y=262;
@@ -2228,7 +2229,7 @@ async function scFire(){const f=G.flags;
   addNote2();
   await fade(1);PT.min=Math.max(PT.min,125);partyEnter([480,560,'u']);if(s===1){removeEnt('idella');setTimeout(()=>{PT.idellaHere=true;},FAST?50:20000);}else PT.idellaHere=true;setMusic(PT.fast?'party':'night');await fade(0);}
 function addNote2(){note('pushfactors','Why families left the South','In the Jim Crow South, Black sharecroppers were often kept in debt by landowners who controlled the books, and in many places it was a crime to leave while you owed. Lynching, often for "offenses" like disputing a debt or trying to leave, was a major reason families left.',null);}
-async function scPolice(){const f=G.flags;sfx('whistle');const c1=npc('copA','cop',140,380,'u');npc('copB','cop',110,410,'u');PT.piano=false;setMusic('none');
+async function scPolice(){const f=G.flags;sfx('whistle');const c1=npc('copA','cop',140,380,'u');npc('copB','cop',100,384,'u');PT.piano=false;setMusic('none');
   await say('cop','All right. Complaint from downstairs. Party\'s over. Everybody out. Now, before I start asking where things came from.','bored, loud, not angry, the same voice as the beat cop on Thursday, looking at the room and at the glasses');
   if(f.gin==='open'||f.gin==='hidden')await narr('The glasses vanish under the tablecloth. The police don\'t look. They are not there for the gin. They are there for the noise.');
   await narr('Guests file out past Cal, down the stairs. Some pay on the way out, guiltily. Most don\'t. Mrs. Odom\'s door is shut.');
@@ -2314,7 +2315,7 @@ CH[6]=async function(){const f=G.flags;
   objs.forEach((o,i)=>{o.x=xs[i];o.y=i%2?290:276;G.map.props.push({x:o.x,y:o.y,sy:322,draw:g=>{if(!o.gone)OBJ_DRAW[o.id](g,o.x,o.y);}});});
   await fade(0);
   await narr('The rent tin is on the table. Beside it, laid out by Vera without a word, is everything that came into the house this week that she doesn\'t recognize.');
-  sfx('door');const otis=npc('otis','otis',150,330,'r',{speed:110});await walk('otis',[[230,330],[400,250],[440,250]]);otis.dir='l';
+  sfx('door');const otis=npc('otis','otis',150,330,'r',{speed:110});await walk('otis',[[230,330],[300,345],[462,345],[462,300]]);otis.dir='l';
   await say('otis','Idella. Lord. You\'re grown.','a deep, slow, gravelly Georgia voice, very tired, and the first thing he says isn\'t about any of it');
   await say('idella','Yes, sir. Good morning, Uncle Otis.','standing up fast');
   await say('otis','Morning. ...Vera.','putting down his bag, sitting, heavily, looking through the doorway at the parlor');
@@ -2357,14 +2358,14 @@ CH[6]=async function(){const f=G.flags;
     if(!left){setTimeout(end,FAST?50:9000);}objective(left?'The table. Uncle Otis picks up each thing. Answer him':'The table. Look at what Vera laid out',null);});
   G.spots=G.spots.filter(s=>!/^o_/.test(s.id));
   // ---------- Otis and Pike ----------
-  if(f.pike==='room'||f.pike==='floor'){sfx('door');npc('pike','pike',888,300,'l',{speed:110});await walk('pike',[[560,300],[520,300]]);
+  if(f.pike==='room'||f.pike==='floor'){sfx('door');npc('pike','pike',888,270,'l',{speed:110});await walk('pike',[[600,270],[548,345],[492,345]]);
     await say('pike','Mr. Mayfield.','polite, steady');
     await say('otis','Mr. Pike. My boy says you had your meeting in my house.','polite, steady');
     await say('pike','I paid for it.','not backing down an inch');
     await say('otis','Randolph\'s paper says your man\'s a fraud who took poor people\'s savings for ships that don\'t float.','even');
     await say('pike','Randolph\'s paper says a lot of things. My man told me I was somebody. Your union hasn\'t won you a thing yet.','even, with dignity');
     await say('otis','...Not yet.','a long pause; then, unexpectedly, almost a smile');
-    await walk('pike',[[230,330],[150,330]]);removeEnt('pike');}
+    await walk('pike',[[300,345],[230,330],[150,330]]);removeEnt('pike');}
   addNote('randolph');
   // ---------- Why did you come early ----------
   await say('otis','Your daddy\'s letter said August.','gentle, direct, tired and kind');
@@ -2402,7 +2403,7 @@ CH[6]=async function(){const f=G.flags;
     toast('The family keeps the flat. A new lodger takes Idella\'s bed.',4000);f.lodger=1;}
   removeEnt('crane');
   // ---------- 6.3 THE LETTER ----------
-  await fade(1);clock('Sunday · 11:00 a.m.');removeEnt('otis');removeEnt('vera');byId('idella').x=330;byId('idella').y=300;byId('idella').dir='r';G.player.x=430;G.player.y=300;G.player.dir='l';setMusic('night');await fade(0);
+  await fade(1);clock('Sunday · 11:00 a.m.');removeEnt('otis');removeEnt('vera');byId('idella').x=340;byId('idella').y=345;byId('idella').dir='u';G.player.x=400;G.player.y=345;G.player.dir='l';setMusic('night');await fade(0);
   await narr('Otis is asleep. Vera is at church. Pike is out. The flat is quiet for the first time all week. Idella sits at the table with a pencil, a sheet of lined paper, and an envelope with her mother\'s name on it.');
   await say('idella','Mama\'s gonna read this out loud. To everybody. In church, probably. And if it\'s good, my sisters come up. And if it\'s bad, they stay.','low, honest, more to herself than to him');
   await say('cal','Where Amos was.','quiet');await say('idella','Where Amos was.','flat');
@@ -2616,7 +2617,7 @@ addEventListener('pointerdown',()=>{if(sndPref&&!AU.ctx)setSound(true);else if(A
 window.__G=G;window.__D={street,flatMap,odomMap,libraryMap,printMap,edgeMap,fireMap,setMap,G,SY,DOOR,facadeBottom};window.__T={G,interact,byId,nearest};
 setMode('title');requestAnimationFrame(frame);
 
-window.HARLEM_FORM={"url":"https://docs.google.com/forms/d/e/1FAIpQLSean6VG-2TLgNEq_X6mURzYm5g4zehtizIjwX2LLWt6t4V0Mw/viewform","note":"entry.2067555535","details":"entry.1925456666"};window.HARLEM_VERSION="56";
+window.HARLEM_FORM={"url":"https://docs.google.com/forms/d/e/1FAIpQLSean6VG-2TLgNEq_X6mURzYm5g4zehtizIjwX2LLWt6t4V0Mw/viewform","note":"entry.2067555535","details":"entry.1925456666"};window.HARLEM_VERSION="58";
 /* ================= 3D BRIDGE =================
    The story engine above (the 2D game's six chapters) keeps running unchanged and owns all game state. This layer
    draws it in 3D: every map change sends the map to Unity (rooms, walls, furniture, blocks, plus two paintings of
@@ -2649,6 +2650,17 @@ window.u3items=function(name){const m=G.map;if(!m||!U3ITEMS[name])return;m.props
 window.u3sit=function(on){const id=byId('idella'),p=G.player;
   if(on){if(p){p.x=440;p.y=278;p.dir='d';u3await();}if(id){id.x=500;id.y=278;id.dir='d';id.seat=1;}setTimeout(()=>u3send('SitPlayer','1'),900);}
   else{if(id)id.seat=0;u3send('SitPlayer','0');}};
+// sit and stand (StageSeats.cs): Unity reports a free seat in reach (sitAvail) or that Cal is seated; the page shows the prompt only when no story prompt is showing
+(function(){
+  const fresh=()=>U3.pl&&performance.now()-U3.pl.t<600;
+  const go=()=>{if(U3.ready&&G.mode==='play'&&!G.busy&&fresh()&&(U3.seated||U3.sitAvail)&&!nearest())u3send('SeatToggle','1');};
+  addEventListener('keydown',e=>{if(e.repeat)return;const tg=e.target&&e.target.tagName;if(tg==='INPUT'||tg==='TEXTAREA'||tg==='SELECT')return;if((e.key||'').toLowerCase()==='e')go();},true);
+  const bu=document.getElementById('b-use');if(bu)bu.addEventListener('touchstart',go,{passive:true});
+  const _up=updatePrompt;
+  updatePrompt=function(){_up();const el=document.getElementById('prompt');
+    if(!el||!el.hidden||!U3.ready||G.mode!=='play'||!fresh()||!(U3.seated||U3.sitAvail))return;
+    const sp=el.querySelector('span');if(sp)sp.textContent=U3.seated?'Stand up':'Sit';el.hidden=false;};
+})();
 function u3paint(m,overpaintWalls){
   const k=Math.min(2,4096/Math.max(m.w,m.h));const c=document.createElement('canvas');c.width=Math.ceil(m.w*k);c.height=Math.ceil(m.h*k);
   const g=c.getContext('2d');g.scale(k,k);const labels=(m.rooms||[]).map(r=>{const l=r.label;r.label=undefined;return l;});
@@ -2707,6 +2719,9 @@ function u3sync(){
   // the story opens a hydrant (spray=1) after the map has been sent, so tell Unity separately
   if(U3.map===G.map){const hs=(G.map.props||[]).filter(p=>p.type==='hydrant'&&p.spray);const key=hs.map(p=>p.x+','+p.y).join(';');if(key!==U3.hyd){U3.hyd=key;hs.forEach(p=>u3send('HydrantOpen',p.x+'|'+p.y));}}
   const n=!!G.night;if(n!==U3.night){U3.night=n;u3send('Night',n?'1':'0');}
+  // impact (cinematics A3-03): G.shake jumps up when the story sets it (bump, crate drop, scrape, BANG) and decays 20/s; a rise is one hit. Reduced motion mutes it.
+  {const cm=document.body.classList.contains('calm');if(cm!==U3.calm){U3.calm=cm;u3send('Calm',cm?'1':'0');}
+   const sk=G.shake||0;if(sk>(U3.shk||0)+0.5&&!cm&&G.mode!=='title')u3send('Shake',sk.toFixed(1)+'|'+Math.round(sk*50));U3.shk=sk;}
   let s='';const seen={};
   const w119=G.map&&G.map.id==='w119';
   for(const e of G.ents){let who=e.who;if(!who){if(/^car/.test(e.id||''))who='streetcar';else continue;}
@@ -2729,7 +2744,7 @@ U3.pl=null;U3.await=null;U3.sync=null;
 // when the story puts Cal somewhere new (a new map, a cut), Unity's reports are ignored until it has caught up
 function u3await(){const p=G.player;if(p){U3.await={x:p.x,y:p.y,t:performance.now()};U3.pl=null;}}
 window.u3PlayerPos=(x,y,mv,run,yaw)=>{const w=U3.await;if(w){if(Math.hypot(x-w.x,y-w.y)>40&&performance.now()-w.t<4000)return;U3.await=null;}
-  U3.pl={x,y,mv:!!mv,run:!!(run&1),yaw,t:performance.now()};G.u3crowd=(run>>1)&1;G.u3bumps=run>>2;};   // bit 0 = running, bit 1 = standing among people (hidden from the policeman), the rest counts crowd bumps
+  U3.pl={x,y,mv:!!mv,run:!!(run&1),yaw,t:performance.now()};G.u3crowd=(run>>1)&1;G.u3bumps=(run>>2)&0xFFFF;U3.sitAvail=!!((run>>20)&1);U3.seated=!!((run>>21)&1);};   // bit 0 = running, bit 1 = standing among people (hidden from the policeman), the rest counts crowd bumps
 function u3drive(){return U3.ready&&U3.pl&&!U3.await&&G.mode==='play'&&performance.now()-U3.pl.t<1000;}
 const _inputVec=inputVec;
 inputVec=function(){return u3drive()?[0,0]:_inputVec();};
@@ -3089,7 +3104,7 @@ function u3start(){
     sk.onclick=()=>{sk.hidden=true;document.body.classList.add('no3d');U3TL.btns.forEach(b=>{b.disabled=false;b.removeAttribute('aria-disabled');b.classList.remove('wait');});
       U3TL.msg.textContent='Ready on the map. 3D loading in the background…';const f=document.getElementById('start');if(f)try{f.focus({preventScroll:true});}catch(e){}};}
   // the data file ships in parts (each under the host's per-file limit); join them into one blob first
-  const N=4,TOTAL=45311848;const got=new Array(N).fill(0);let unityP=0;
+  const N=8,TOTAL=95623529;const got=new Array(N).fill(0);let unityP=0;
   const show=()=>{const dl=Math.min(1,got.reduce((a,b)=>a+b,0)/TOTAL);u3tl(0.85*dl+0.15*unityP,dl<1?'Loading Harlem… downloading':'Loading Harlem… starting up');};
   const grab=i=>fetch('Build/data'+(i+1)+'.br.wasm').then(async r=>{if(!r.ok)throw new Error('HTTP '+r.status);
     if(!r.body||!r.body.getReader)return r.arrayBuffer();const rd=r.body.getReader(),chunks=[];for(;;){const {done,value}=await rd.read();if(done)break;chunks.push(value);got[i]+=value.length;show();}
@@ -3117,7 +3132,7 @@ window.__u3beat=function(n){
   if(n==='door2'){window.__u3dev.show('flat');near([380,350],0,0);return u3beat('door2',218,330,2200,1.4);}
   if(n==='end'){street();near(DOOR.home,40,60);return u3beat('end',G.player.x,G.player.y,3000,1.5,{card:()=>console.warn('[test] end card would show now'),cardAt:1800});}
   return Promise.resolve();};
-window.__u3dev={beat(n){return window.__u3beat(n);},skip(){window.dispatchEvent(new KeyboardEvent('keydown',{key:'e'}));},ev(s){return eval(s);},keys(k,on){K[k]=on;},goal(x,y){G.goal={x,y,stuck:0};return [G.player.x,G.player.y];},where(){return [Math.round(G.player.x),Math.round(G.player.y),G.mode,G.obj];},show(n){const M={flat:()=>flatMap(),flatn:()=>flatMap({night:1}),party:()=>flatMap({night:1,party:1}),odom:()=>odomMap(),library:()=>libraryMap(),print:()=>printMap(),w119:()=>edgeMap(),fire:()=>fireMap(),street:()=>streetMap(),streetn:()=>streetMap({night:1})};const m=M[n]();setMap(m,[m.w/2,m.h*0.6,'u']);G.mode='play';return m.id;}};
+window.__u3dev={beat(n){return window.__u3beat(n);},skip(){window.dispatchEvent(new KeyboardEvent('keydown',{key:'e'}));},ev(s){return eval(s);},/* dev check (A4-02/05/06): every visible person standing inside a map solid, as [{id,x,y,box}]. mg = clearance in map px (default Cal's capsule, 0.28 m). __u3dev.watch() logs each new offender once as '[solids]' */solids(mg){const M=G.map;if(!M||!M.solids)return [];const sc=/^(street|w119)/.test(M.id||'')?0.045:0.022;const r=mg!=null?mg:0.28/sc;const out=[];for(const e of G.ents){if(e.vis===false||e.seat||(e.r||0)>=20)continue;for(const s of M.solids){if(s.off)continue;if(e.x+r>s.x&&e.x-r<s.x+s.w&&e.y+r>s.y&&e.y-r<s.y+s.h){out.push({id:e.id,x:Math.round(e.x),y:Math.round(e.y),box:[s.x,s.y,s.w,s.h]});break;}}}return out;},watch(on){clearInterval(window.__u3sw);if(on===false)return;const seen={};window.__u3sw=setInterval(()=>{const m=G.map&&G.map.id;for(const o of window.__u3dev.solids()){const k=m+':'+o.id;if(!seen[k]){seen[k]=1;console.warn('[solids]',m,o.id,o.x,o.y,JSON.stringify(o.box));}}},1500);},keys(k,on){K[k]=on;},goal(x,y){G.goal={x,y,stuck:0};return [G.player.x,G.player.y];},where(){return [Math.round(G.player.x),Math.round(G.player.y),G.mode,G.obj];},show(n){const M={flat:()=>flatMap(),flatn:()=>flatMap({night:1}),party:()=>flatMap({night:1,party:1}),odom:()=>odomMap(),library:()=>libraryMap(),print:()=>printMap(),w119:()=>edgeMap(),fire:()=>fireMap(),street:()=>streetMap(),streetn:()=>streetMap({night:1})};const m=M[n]();setMap(m,[m.w/2,m.h*0.6,'u']);G.mode='play';return m.id;}};
 
 // ---------- F9 bug report ----------
 // F9 pauses the game, grabs the 3D view, and opens a box for a note. "Send" stores the report in the artifact's database
@@ -3302,6 +3317,298 @@ setInterval(()=>{
     const s=ambPick(day,!!m.night,Math.max(128,Math.min(138,n)),G.player.x);if(!s)return;
     AMB.last=now;AMB.walked=0;ambShow(s);
   }catch(e){}},500);
+
+/* ================= 3D EDITION SOUND: period street ambience, rooms, footsteps =================
+   Everything is synthesised with WebAudio (no files). It replaces the 2D engine's one-note ambience (ambStart/ambStop)
+   with layers that change by place (street, park, fire escape, rooms) and by time (day or night):
+   a city bed, crowd murmur, horse hooves and wagon rattle, a streetcar bell and rails, a distant Model T and its
+   rubber-bulb horn, voices called across the street, crickets, a piano from an open window at night.
+   Rooms get room tone, a clock and the street heard through the window. Cal's footsteps change with the ground. */
+const AB={bus:null,muf:null,far:null,nodes:[],L:{},tm:null,next:{},key:'',stepAt:0,steps:0,on:false};
+// mix knobs, set from audio_mix/render.py measurements (dialogue about -21 dBFS RMS; music -10 dB, ambience -16 dB under it)
+const ABX={music:{street:4.6,party:2.35,night:8,quiet:8.4,tense:3,none:0},room:2.2,park:1.4,dm:0.5,da:0.7,sfx:1.4,cue:1.7,amb:1.25,step:1.5};
+const abR=(a,b)=>a+Math.random()*(b-a);
+function abNearCount(){const p=G.player;if(!p||!G.ents||!G.map||!/^street/.test(G.map.id||''))return 0;let n=0;for(const e of G.ents)if(e.walker&&e.vis!==false&&Math.hypot(e.x-p.x,e.y-p.y)<320)n+=Math.hypot(e.x-p.x,e.y-p.y)<150?1.5:1;return Math.min(14,Math.round(n));}   // walkers around Cal: the street murmur follows the crowd (nearer people count more)
+function abCtx(){const m=G.map||{},id=m.id||'';
+  return {place:id==='w119'?'park':/^street/.test(id)?'street':id==='fire'?'high':'room',night:!!(G.night||m.night),crowd:AU.ambKind==='crowd',guests:(typeof PT!=='undefined'&&PT&&AU.ambKind==='crowd')?(PT.guests||0):0,near:abNearCount(),hush:AU.ctx&&AU.ctx.currentTime<(AB.hushUntil||0)};}
+// one-shot noise burst or tone into a destination
+function abN(dur,freq,q,type,gain,t,dest){const c=AU.ctx;const s=c.createBufferSource();s.buffer=AU.noise;const f=c.createBiquadFilter();f.type=type;f.frequency.value=freq;f.Q.value=q;
+  const g=c.createGain();g.gain.setValueAtTime(gain,t);g.gain.exponentialRampToValueAtTime(0.0005,t+dur);s.connect(f);f.connect(g);g.connect(dest);s.start(t,Math.random()*1.5);s.stop(t+dur+0.05);}
+function abPan(p,dest){const c=AU.ctx;if(!c.createStereoPanner)return dest;const n=c.createStereoPanner();n.pan.value=p;n.connect(dest);return n;}
+// a looping noise layer through a filter; returns its gain node so the scheduler can set the level
+function abLayer(type,freq,q,lfoHz,lfoDepth){const c=AU.ctx;const s=c.createBufferSource();s.buffer=AU.noise;s.loop=true;
+  const f=c.createBiquadFilter();f.type=type;f.frequency.value=freq;f.Q.value=q;const g=c.createGain();g.gain.value=0;s.connect(f);f.connect(g);g.connect(AB.bus);s.start(0,Math.random()*1.5);AB.nodes.push(s);
+  if(lfoHz){const l=c.createOscillator();l.frequency.value=lfoHz;const lg=c.createGain();lg.gain.value=lfoDepth;l.connect(lg);lg.connect(f.frequency);l.start();AB.nodes.push(l);}
+  return g;}
+function abStart(){const c=AU.ctx;if(AB.on)abStop(true);AB.on=true;
+  AB.bus=c.createGain();AB.bus.gain.value=1;AB.bus.connect(AU.amb);
+  AB.muf=c.createBiquadFilter();AB.muf.type='lowpass';AB.muf.frequency.value=480;const mg=c.createGain();mg.gain.value=0.55;AB.muf.connect(mg);mg.connect(AB.bus);          // heard through a window or wall
+  AB.far=c.createBiquadFilter();AB.far.type='lowpass';AB.far.frequency.value=1500;const fg=c.createGain();fg.gain.value=0.6;AB.far.connect(fg);fg.connect(AB.bus);          // an open window across the street
+  AB.L={rumble:abLayer('lowpass',300,0.7,0.11,60),murmur:abLayer('bandpass',520,1.1,0.37,140),murmur2:abLayer('bandpass',1450,2,0.23,300),air:abLayer('bandpass',2600,0.5,0,0),
+        room:abLayer('lowpass',170,0.7,0,0),outside:abLayer('lowpass',230,0.7,0.09,40),hiss:abLayer('highpass',5200,0.5,0.05,600),pipes:abLayer('bandpass',95,2.5,0.07,15),tram:abLayer('lowpass',200,0.9,7,60)};   // hiss = a gas mantle; pipes = the building's low hum
+  // crickets: a high tone chopped fast, only on warm quiet nights
+  const o=c.createOscillator();o.frequency.value=4300;const cg=c.createGain();cg.gain.value=0;const ch=c.createGain();ch.gain.value=0;const l=c.createOscillator();l.type='square';l.frequency.value=13;const lg=c.createGain();lg.gain.value=0.5;
+  l.connect(lg);lg.connect(ch.gain);o.connect(ch);ch.connect(cg);cg.connect(AB.bus);o.start();l.start();AB.nodes.push(o,l);AB.L.cricket=cg;
+  abPlaceNodes();const t=c.currentTime;AB.key='';AB.next={horse:t+2.5,bell:t+5,car:t+14,call:t+9,piano:t+11,tick:t+1,win:t+8};
+  clearInterval(AB.tm);AB.tm=setInterval(abTick,120);auApplyVol();}
+function abStop(now){clearInterval(AB.tm);AB.on=false;const c=AU.ctx;if(!c||!AB.bus)return;const bus=AB.bus,nodes=AB.nodes;AB.nodes=[];AB.bus=null;
+  bus.gain.setTargetAtTime(0,c.currentTime,now?0.05:0.4);setTimeout(()=>{nodes.forEach(n=>{try{n.stop();}catch(e){}});try{bus.disconnect();}catch(e){}},now?400:2500);}
+// levels per place and time of day
+function abLevels(x){const o=abLevels0(x);if(!(x.place==='street'&&!x.night))for(const k in o)o[k]*=ABX.amb*(x.place==='park'?ABX.park:1)*(x.place==='room'&&!x.crowd&&(k==='room'||k==='outside')?ABX.room:1);return o;}   // night and indoor beds up 2 dB
+function abLevels0(x){const n=x.night,p=x.place,cd=(0.05+Math.min(1,x.guests/36)*0.3)*(x.hush?0.15:1);   // party crowd grows with the guest count
+  if(p==='street')return {rumble:n?0.16:0.26,murmur:(n?0.035:0.08)+Math.sqrt(x.near)*(n?0.014:0.026),murmur2:(n?0.016:0.04)+Math.sqrt(x.near)*(n?0.008:0.016),air:n?0.012:0.03,room:0,outside:0,hiss:0,pipes:0,cricket:n?0.006:0};
+  if(p==='park')return {rumble:0.09,murmur:0.045,murmur2:0.02,air:0.03,room:0,outside:0,hiss:0,pipes:0,cricket:0.007};
+  if(p==='high')return {rumble:0.12,murmur:0.02,murmur2:0.01,air:0.015,room:0,outside:0,hiss:0,pipes:0,cricket:0.008};
+  return {rumble:0,murmur:x.crowd?cd*0.7:0,murmur2:x.crowd?cd*0.45:0,air:0,room:0.1,outside:x.night?0.035:0.06,hiss:x.night?0.012:0.003,pipes:x.crowd?0.03:0.07,cricket:x.night?0.003:0};}
+function abEvery(name,lo,hi,fn){const t=AU.ctx.currentTime;if(t<AB.next[name])return;AB.next[name]=t+abR(lo,hi);fn(t+0.05);}
+function abTick(){if(!AU.on||!AU.ctx||!AB.bus||!G.map)return;const c=AU.ctx,x=abCtx(),key=x.place+x.night+x.crowd+Math.round(x.guests/3)+x.hush+x.near;
+  if(key!==AB.key){AB.key=key;const lv=abLevels(x);for(const k in lv)AB.L[k].gain.setTargetAtTime(lv[k],c.currentTime,1.4);}
+  abNear(x);abParty(x);abCars(x);
+  const out=x.place!=='room',d=x.night?2.2:1;                  // fewer things pass at night
+  const dest=out?AB.bus:AB.muf,vol=out?1:0.8;
+  if(out){
+    abEvery('horse',7*d,16*d,t=>abHorse(t,dest,x.place==='park'?0.5:1));
+    if(x.place!=='street'&&AU.ctx.currentTime>(AB.storyBell||0)+14)abEvery('bell',34*d,70*d,t=>abBell(dest,0.5,true));   // far off, where no car is in sight
+    abEvery('car',24*d,50*d,t=>abCar(t,dest));
+    abEvery('call',12*d,28*d,t=>abCall(t,dest));
+    if(x.night&&(AU.mood==='none'||AU.vol.music===0))abEvery('piano',14,30,t=>abPiano(t));   // never over the story's own music
+  }else{
+    abEvery('win',22,45,t=>{Math.random()<0.6?abHorse(t,AB.muf,0.7):abBell(AB.muf,0.5,true);});
+    abEvery('creak',16,38,t=>abCreak(t,x));
+    if(!x.crowd)abEvery('tick',1,1,t=>abN(0.02,x.night?2300:2000,6,'bandpass',0.05,t,AB.bus));  // the clock
+  }}
+// the streetcars on the avenue (the real entities): a gong as one comes into earshot, and a rail rumble that follows its distance
+function abCars(x){const p=G.player;if(!p||!G.ents||!AB.L.tram)return;const c=AU.ctx,T=c.currentTime;let best=0,bc=null;AB.bells=AB.bells||{};
+  if(x.place==='street')for(const e of G.ents){if(!/^car/.test(e.id||''))continue;const dy=Math.abs(e.y-p.y),dx=Math.abs(e.x-p.x),d=Math.hypot(dx,dy*0.7),k=Math.max(0,1-d/520);
+    if(k>best){best=k;bc=e;}
+    const b=AB.bells[e.id]||0;
+    if(d<420&&T>b+26&&!(AB.storyBell&&T<AB.storyBell+10)){AB.bells[e.id]=T;abBell(AB.bus,0.35+0.5*k,true,abPanFor(e,p));}}
+  AB.L.tram.gain.setTargetAtTime(best*best*(x.night?0.08:0.12)*(AU.duck?0.6:1),T,0.5);}
+// a horse walking (or trotting) past: a pair of hoof beats per step, louder then softer as it passes, sometimes with a wagon
+function abHorse(t,dest,v){const c=AU.ctx,trot=Math.random()<0.3,gap=trot?0.3:0.55,n=Math.floor(abR(6,13)),p0=Math.random()<0.5?-0.85:0.85,p1=-p0;
+  const pn=abPan(p0,dest);if(pn.pan)pn.pan.linearRampToValueAtTime(p1,t+n*gap);
+  for(let i=0;i<n;i++){const near=0.35+0.65*Math.sin(Math.PI*(i+0.5)/n),g=0.5*v*near,w=t+i*gap+(i%2?0.02:0);
+    for(const o of [0,0.11]){abN(0.05,abR(900,1300),2.5,'bandpass',g*(o?0.7:1),w+o,pn);tone(abR(150,190),0.05,g*0.8,'sine',w+o,pn,70);}}
+  if(Math.random()<0.45){const s=abLayerShot(t,n*gap,pn,v);}}
+// iron-tyred wagon rattle under the hooves
+function abLayerShot(t,dur,dest,v){const c=AU.ctx,s=c.createBufferSource();s.buffer=AU.noise;s.loop=true;const f=c.createBiquadFilter();f.type='bandpass';f.frequency.value=420;f.Q.value=0.8;
+  const g=c.createGain();g.gain.setValueAtTime(0.0001,t);g.gain.linearRampToValueAtTime(0.09*v,t+dur*0.4);g.gain.linearRampToValueAtTime(0.0001,t+dur);
+  const l=c.createOscillator();l.frequency.value=abR(9,14);const lg=c.createGain();lg.gain.value=0.06*v;l.connect(lg);lg.connect(g.gain);
+  s.connect(f);f.connect(g);g.connect(dest);s.start(t,Math.random()*1.5);s.stop(t+dur+0.1);l.start(t);l.stop(t+dur+0.1);}
+// the streetcar: a clanging gong (two quick strikes, a lower tone with beating partials), with wheels and rail joints.
+// far=true is the ordinary passing car down the avenue: softened, rounder, slower to arrive. far=false is the story's own bell (Idella flinches at it): a sharp close strike.
+function abBell(dest,v,far,pan){const c=AU.ctx,t=c.currentTime+0.05,pn=abPan(pan===undefined?abR(-0.7,0.7):pan,dest);
+  const f0=far?820:900,att=far?0.012:0.002,k=far?0.55:1;
+  const lp=c.createBiquadFilter();lp.type='lowpass';lp.frequency.value=far?2600:6000;lp.connect(pn);
+  [0,far?0.34:0.24].forEach((o,n)=>[[1,0.07],[1.59,0.05],[2.14,0.035],[2.76,0.03],[4.07,0.014],[5.4,0.008]].forEach(([m,g],i)=>{
+    const dec=(i<2?0.9:0.4)*(far?1.4:1),w=t+o,ff=f0*m*(n?1.012:1);
+    const a=c.createOscillator(),gg=c.createGain();a.type='sine';a.frequency.value=ff;gg.gain.setValueAtTime(0.0001,w);gg.gain.linearRampToValueAtTime(g*v*k*(n?0.85:1),w+att);gg.gain.exponentialRampToValueAtTime(0.0001,w+dec);
+    a.connect(gg);gg.connect(lp);a.start(w);a.stop(w+dec+0.05);}));
+  if(!far)abN(0.03,3200,2,'bandpass',0.45*v,t,pn);                                     // the hammer on the gong
+  const dur=far?7:5,s=c.createBufferSource();s.buffer=AU.noise;s.loop=true;const f=c.createBiquadFilter();f.type='bandpass';f.frequency.value=380;f.Q.value=0.9;const g=c.createGain();
+  g.gain.setValueAtTime(0.0001,t);g.gain.linearRampToValueAtTime(0.06*v*(far?0.8:1),t+dur*0.4);g.gain.linearRampToValueAtTime(0.0001,t+dur);s.connect(f);f.connect(g);g.connect(pn);s.start(t,Math.random()*1.5);s.stop(t+dur+0.2);
+  for(let i=0;i<6;i++)abN(0.05,abR(500,800),1.5,'bandpass',(far?0.05:0.07)*v*Math.sin(Math.PI*(i+0.5)/6),t+0.8+i*(dur-1.2)/6+abR(0,0.1),pn);}   // rail joints clacking as it passes
+// the building settling: a board creaking, a pipe knocking, a neighbour's step overhead
+function abCreak(t,x){const c=AU.ctx,r=Math.random();
+  if(r<0.45){const o=c.createOscillator();o.type='sawtooth';const f0=abR(150,260);o.frequency.setValueAtTime(f0,t);o.frequency.linearRampToValueAtTime(f0*abR(0.8,1.25),t+0.5);const f=c.createBiquadFilter();f.type='bandpass';f.frequency.value=420;f.Q.value=4;
+    const g=c.createGain();g.gain.setValueAtTime(0.0001,t);g.gain.linearRampToValueAtTime(0.012,t+0.12);g.gain.linearRampToValueAtTime(0.0001,t+0.55);o.connect(f);f.connect(g);g.connect(AB.bus);o.start(t);o.stop(t+0.6);}
+  else if(r<0.75){for(let i=0;i<3;i++){abN(0.06,abR(300,420),3,'bandpass',0.25,t+i*0.38+abR(0,0.04),AB.bus);tone(abR(140,170),0.07,0.03,'sine',t+i*0.38,AB.bus,100);}}   // water in the pipes
+  else{const n=Math.floor(abR(3,7));for(let i=0;i<n;i++){const w=t+i*abR(0.5,0.7);abN(0.07,200,1,'lowpass',0.12,w,AB.muf);tone(90,0.09,0.03,'sine',w,AB.muf,60);}}}   // somebody walking in the flat above
+// a Model T putting past: a slow chugging engine, and sometimes the rubber-bulb horn
+function abCar(t,dest){const c=AU.ctx,pn=abPan(Math.random()<0.5?-0.8:0.8,dest),dur=5;if(pn.pan)pn.pan.linearRampToValueAtTime(-pn.pan.value,t+dur);
+  const o=c.createOscillator();o.type='sawtooth';o.frequency.value=46;const f=c.createBiquadFilter();f.type='lowpass';f.frequency.value=260;const g=c.createGain();
+  g.gain.setValueAtTime(0.0001,t);g.gain.linearRampToValueAtTime(0.05,t+dur*0.45);g.gain.linearRampToValueAtTime(0.0001,t+dur);
+  const l=c.createOscillator();l.type='square';l.frequency.value=9;const lg=c.createGain();lg.gain.value=0.02;l.connect(lg);lg.connect(g.gain);
+  o.connect(f);f.connect(g);g.connect(pn);o.start(t);l.start(t);o.stop(t+dur+0.1);l.stop(t+dur+0.1);
+  if(Math.random()<0.4){tone(340,0.3,0.03,'sawtooth',t+1.2,pn,300);tone(255,0.45,0.03,'sawtooth',t+1.6,pn,230);}}
+// someone calling across the street, far off: a breathy voice-shaped swoop (never words)
+function abCall(t,dest){const c=AU.ctx,pn=abPan(abR(-0.9,0.9),dest),f0=Math.random()<0.5?180:120;
+  for(const o of [0,Math.random()<0.5?0.45:9]){if(o>5)break;const s=c.createOscillator();s.type='sawtooth';s.frequency.setValueAtTime(f0*1.25,t+o);s.frequency.exponentialRampToValueAtTime(f0,t+o+0.4);
+    const f=c.createBiquadFilter();f.type='bandpass';f.frequency.value=900;f.Q.value=2.5;const g=c.createGain();g.gain.setValueAtTime(0.0001,t+o);g.gain.exponentialRampToValueAtTime(0.025,t+o+0.06);g.gain.exponentialRampToValueAtTime(0.0001,t+o+0.5);
+    s.connect(f);f.connect(g);g.connect(pn);s.start(t+o);s.stop(t+o+0.55);}}
+// a stride-blues phrase on a piano heard from an open window far down the block
+function abPiano(t){const c=AU.ctx,B=[0,3,5,6,7,10,12],n=Math.floor(abR(4,9)),step=abR(0.26,0.4);let i=Math.floor(abR(2,5));const root=58+(Math.random()<0.5?0:5);
+  for(let k=0;k<n;k++){i=Math.max(0,Math.min(B.length-1,i+Math.floor(abR(-1.6,1.9))));const f=NT(root+B[i]+(B[i]>7?0:12)),w=t+k*step+(k%2?0.03:0),dur=0.9;
+    const o1=c.createOscillator(),o2=c.createOscillator(),g=c.createGain();o1.type='triangle';o2.type='sine';o1.frequency.value=f;o2.frequency.value=f*2.003;
+    g.gain.setValueAtTime(0.0001,w);g.gain.exponentialRampToValueAtTime(0.05,w+0.008);g.gain.exponentialRampToValueAtTime(0.012,w+0.2);g.gain.exponentialRampToValueAtTime(0.0001,w+dur);
+    o1.connect(g);o2.connect(g);g.connect(AB.far);o1.start(w);o2.start(w);o1.stop(w+dur+0.05);o2.stop(w+dur+0.05);}
+  const r=NT(root-12);const w=t+n*step;const o=c.createOscillator(),g=c.createGain();o.type='triangle';o.frequency.value=r;g.gain.setValueAtTime(0.0001,w);g.gain.exponentialRampToValueAtTime(0.06,w+0.01);g.gain.exponentialRampToValueAtTime(0.0001,w+1.4);o.connect(g);g.connect(AB.far);o.start(w);o.stop(w+1.5);}
+// replace the 2D engine's ambience with the layers above
+const _ambStop=ambStop;
+ambStop=function(keepKind){abStop();_ambStop(keepKind);};
+ambStart=function(kind,force){if(!force&&AU.ambKind===kind)return;ambStop();AU.ambKind=kind;if(!AU.on||!AU.ctx||!kind)return;abStart();};
+// the iron bell on the streetcar (the story calls sfx('trolley') too)
+const _sfx=sfx;
+sfx=function(name){
+  if(name==='trolley'&&AU.on&&AU.ctx){AB.storyBell=AU.ctx.currentTime;
+    // the story's own bell: if Idella is on the street with Cal, she flinches (a small start of the shoulders and a turn of the head toward the car)
+    const id=G.ents&&byId('idella'),p=G.player,car=G.ents&&G.ents.find(e=>/^car/.test(e.id||''));
+    if(id&&p&&id.vis!==false&&/^street/.test((G.map&&G.map.id)||'')&&Math.hypot(id.x-p.x,id.y-p.y)<220)u3send('Flinch','idella|'+((car?car.x:1000)>=id.x?1:-1));
+    abBell(AU.sfx,1.2,false,car?abPanFor(car,p):undefined);return;}
+  if(name==='bump'&&AU.on&&AU.ctx){abShoulder();return;}      // brushing past someone: cloth and a grunt of air, not a click
+  if(name==='drop'&&AU.on&&AU.ctx){abSetDown();return;}      // the ice or a crate set down
+  if(name==='door'&&AU.on&&AU.ctx){abDoor(true);return;}
+  return _sfx(name);};
+function abShoulder(){const t=AU.ctx.currentTime;nz(0.1,500,0.9,0.28,'lowpass',t);nz(0.08,1200,0.8,0.1,'bandpass',t+0.01);tone(150,0.12,0.05,'sine',t,null,110);}
+function abSetDown(){const t=AU.ctx.currentTime,sf=G.player?abSurface(G.player,abCtx()):'pave';nz(0.22,sf==='pave'||sf==='stoop'?260:180,1,0.55,'lowpass',t);tone(80,0.25,0.3,'sine',t,null,45);nz(0.06,sf==='iron'?1400:900,1,0.1,'bandpass',t+0.01);}
+// where a streetcar is heard: -1 left, +1 right of Cal (the map's x axis is the screen's, so west of Cal is left)
+function abPanFor(car,p){return Math.max(-0.9,Math.min(0.9,(car.x-p.x)/380));}
+// let the ambience breathe in the street: the stride piano is a little lower there, so the city can be heard
+const _musicLevel=musicLevel;
+musicLevel=function(){const x=G.map?abCtx():null;return _musicLevel()*(AU.duck?ABX.dm/0.4:1)*(ABX.music[AU.mood]??3)*(x&&x.place==='street'&&AU.mood!=='party'?0.7:1);};
+// ---------- Cal's footsteps: ONE source, Unity's animation events (the foot plants), with the surface taken from the map ----------
+// Unity calls window.u3Sfx(kind): 1 foot plant, 2 jump takeoff, 3 landing, 4 hard stop. Its stock clips are switched off in the build, so nothing doubles.
+// Surfaces: iron (fire escape), tile (the kitchen), stairs (the flat's landing), mat (a rug), board (any other room), stoop (stone at a door),
+// grass (the park), pave (the street).
+function abSurface(p,x){const m=G.map;if(!m)return 'pave';if(m.id==='fire')return 'iron';
+  if(x.place==='street'){for(const k in DOOR){const d=DOOR[k];if(Math.hypot(d[0]-p.x,d[1]-p.y)<32)return 'stoop';}return 'pave';}
+  if(x.place==='park')return 'grass';
+  if(x.place!=='room'||!m.rooms)return 'board';if(/^flat/.test(m.id||'')&&Math.hypot(60-p.x,560-p.y)<130&&p.x<215&&p.y>150)return 'stairs';
+  for(const r of m.rooms){if(r.rugAt&&p.x>r.rugAt[0]&&p.x<r.rugAt[0]+r.rugAt[2]&&p.y>r.rugAt[1]&&p.y<r.rugAt[1]+r.rugAt[3])return 'mat';
+    if(r.tile&&p.x>r.x&&p.x<r.x+r.w&&p.y>r.y&&p.y<r.y+r.h)return 'tile';}
+  return 'board';}
+function abStep(){if(!AU.on||!AU.ctx||!G.player||!G.map)return;const p=G.player,run=!!G.running&&p.moving!==false;
+  const c=AU.ctx,t=c.currentTime,x=abCtx(),v=ABX.step*(run?1.25:1)*(0.85+Math.random()*0.3),side=(++AB.steps)%2?1:0.9,sf=abSurface(p,x);
+  if(sf==='stoop'){nz(0.035,3000*side,1.5,0.16*v,'bandpass',t);nz(0.08,420,1,0.14*v,'lowpass',t);tone(1700,0.05,0.012*v,'sine',t,null,1300);}   // stone steps in front of a door
+  else if(sf==='stairs'){nz(0.09,200*side,1,0.2*v,'lowpass',t);tone(100*side,0.12,0.08*v,'sine',t,null,60);if(AB.steps%4===0)tone(310,0.2,0.014,'sawtooth',t+0.02,null,250);}   // wooden stairs, heavier and hollow
+  else if(sf==='mat'){nz(0.08,160,0.8,0.22*v,'lowpass',t);nz(0.03,900,1,0.08*v,'bandpass',t);}   // a doormat or rug: soft and muffled
+  else if(sf==='tile'){nz(0.025,3400*side,2,0.2*v,'bandpass',t);nz(0.05,700,1,0.1*v,'lowpass',t);tone(1250*side,0.035,0.02*v,'triangle',t,null,900);}   // kitchen tile: a hard, bright tap
+  else if(sf==='iron'){nz(0.03,1400*side,2.5,0.2*v,'bandpass',t);tone(300*side,0.35,0.05*v,'sine',t,null,270);tone(612*side,0.25,0.018*v,'sine',t,null,590);nz(0.05,260,1,0.1*v,'lowpass',t);}   // the iron fire escape: a footfall that rings
+  else if(sf==='grass'){nz(0.09,1500*side,0.8,0.1*v,'bandpass',t);nz(0.06,500,1,0.09*v,'lowpass',t);}                // the park: gravel and grass
+  else if(sf==='pave'){nz(0.04,2100*side,1.3,0.12*v,'bandpass',t);nz(0.07,320*side,1,0.12*v,'lowpass',t);}            // tar and cobble
+  else{nz(0.07,240*side,1,0.2*v,'lowpass',t);tone(120*side,0.08,0.08*v,'sine',t,null,70);
+    if(AB.steps%11===0)tone(280,0.22,0.015,'sawtooth',t+0.03,null,230);}}                                           // room boards: a floorboard creaks now and then
+// jump takeoff: a scuff of the shoe and a rustle of cloth; landing: a thud by surface; hard stop: the body meets something solid
+function abJump(){const t=AU.ctx.currentTime,v=ABX.step;nz(0.06,1800,1.2,0.14*v,'bandpass',t);nz(0.14,900,0.8,0.07*v,'bandpass',t+0.02);tone(190,0.1,0.05*v,'sine',t,null,130);}
+function abLand(){const t=AU.ctx.currentTime,sf=abSurface(G.player||{x:0,y:0},abCtx()),v=ABX.step*1.3;
+  if(sf==='iron'){nz(0.04,1200,2,0.2*v,'bandpass',t);tone(280,0.5,0.07*v,'sine',t,null,250);}
+  else if(sf==='tile'){nz(0.04,3000,1.5,0.2*v,'bandpass',t);nz(0.08,260,1,0.2*v,'lowpass',t);}
+  else if(sf==='pave'||sf==='stoop'){nz(0.05,2000,1.3,0.16*v,'bandpass',t);nz(0.09,240,1,0.22*v,'lowpass',t);}
+  else{nz(0.1,200,1,0.28*v,'lowpass',t);tone(95,0.14,0.1*v,'sine',t,null,55);}
+  nz(0.1,800,0.8,0.05*v,'bandpass',t+0.03);}                       // a little cloth settling
+function abThud(k){const t=AU.ctx.currentTime;nz(0.12,150,1,0.45*(k||1),'lowpass',t);tone(80,0.14,0.18*(k||1),'sine',t,null,45);nz(0.05,700,1,0.07*(k||1),'bandpass',t);}
+window.u3Sfx=function(kind){if(!AU.on||!AU.ctx)return;
+  if(kind===1){AB.unityStep=performance.now();abStep();}
+  else if(kind===2)abJump();
+  else if(kind===3)abLand();
+  else if(kind===4)abThud(0.8);};
+// until Unity's first foot plant arrives (an older build, or the frames before it starts), a timer keeps the steps going; once Unity sends them, it stops
+setInterval(()=>{if(AB.unityStep||!AU.on||!AU.ctx||G.mode!=='play'||!G.player||!G.map)return;const p=G.player,now=performance.now();
+  if(!p.moving){AB.stepAt=0;return;}
+  if(now<AB.stepAt)return;AB.stepAt=now+(G.running?310:480);abStep();},60);
+// ---------- interaction cues: prompt click, doors, coins, ice chips ----------
+function abClick(){const t=AU.ctx.currentTime;tone(1800,0.04,0.045,'triangle',t,null,1150);nz(0.012,3600,1,0.07,'bandpass',t);}
+function abDoor(inn){const c=AU.ctx,t=c.currentTime+0.02,o=c.createOscillator();o.type='sawtooth';o.frequency.setValueAtTime(140,t);o.frequency.linearRampToValueAtTime(235,t+0.28);o.frequency.linearRampToValueAtTime(175,t+0.5);
+  const f=c.createBiquadFilter();f.type='bandpass';f.frequency.value=650;f.Q.value=3;const g=c.createGain();g.gain.setValueAtTime(0.0001,t);g.gain.linearRampToValueAtTime(0.05,t+0.1);g.gain.linearRampToValueAtTime(0.0001,t+0.52);
+  const l=c.createOscillator();l.frequency.value=28;const lg=c.createGain();lg.gain.value=0.02;l.connect(lg);lg.connect(g.gain);o.connect(f);f.connect(g);g.connect(AU.sfx);o.start(t);l.start(t);o.stop(t+0.55);l.stop(t+0.55);
+  const w=t+(inn?0.5:0.05);nz(0.025,1700,3,0.5,'bandpass',w);tone(760,0.05,0.12,'square',w);nz(0.03,1100,3,0.45,'bandpass',w+0.08);tone(520,0.05,0.1,'square',w+0.08);   // the latch
+  nz(0.12,200,1,0.2,'lowpass',w+0.12);}
+function abCoin(up){const t=AU.ctx.currentTime,k=up?1:0.75;[[2637,0.5],[3520,0.35],[4186,0.2]].forEach(([f,d],i)=>tone(f*k,d,0.05,'sine',t+i*0.05));nz(0.02,5000,2,0.1,'bandpass',t);}
+function abChip(){const t=AU.ctx.currentTime;nz(0.03,3500,4,0.6,'bandpass',t);tone(2400,0.05,0.12,'triangle',t,null,1200);nz(0.025,2800,4,0.45,'bandpass',t+0.05);tone(4200,0.14,0.03,'sine',t+0.06);}
+let _abMap=null;
+{const _sm=setMap;setMap=function(m,spawn){const was=abCtx().place;_sm(m,spawn);if(!AU.on||!AU.ctx||!_abMap)return;const now=abCtx().place;
+  if(was!==now&&(now==='room'||was==='room'))abDoor(now==='room');};}
+setTimeout(()=>{_abMap=1;},3000);   // no door sound for the opening scene
+const abSt={prompt:false,money:null,ice:null};
+setInterval(()=>{if(!AU.on||!AU.ctx)return;
+  const pe=document.getElementById('prompt'),pv=!!pe&&!pe.hidden;if(pv&&!abSt.prompt)abClick();abSt.prompt=pv;
+  if(typeof G.money==='number'){if(abSt.money!==null&&G.money!==abSt.money)abCoin(G.money>abSt.money);abSt.money=G.money;}
+  const ice=G.player&&G.player.iceAmt;if(typeof ice==='number'){if(abSt.ice!==null&&abSt.ice-ice>0.025)abChip();abSt.ice=ice;}else abSt.ice=null;},60);
+// ---------- position-aware sound: the places along the street are heard as Cal walks up to them ----------
+// DOOR (world.js) gives each building's door in map pixels. Church hymn on Sundays, pool hall clack, Liberty Hall crowd and speaker, library hush.
+const ABP={church:{r:380},pool:{r:300},liberty:{r:380},library:{r:260}};
+function abPlaceNodes(){const c=AU.ctx;AB.P={};
+  // church: a slow four-voice hymn chord heard through the walls
+  const lp=c.createBiquadFilter();lp.type='lowpass';lp.frequency.value=520;const pg=c.createGain();pg.gain.value=0;lp.connect(pg);pg.connect(AB.bus);AB.P.church=pg;AB.P.osc=[];
+  [0,0,0,0].forEach(()=>{const o=c.createOscillator();o.type='triangle';o.frequency.value=100;const g=c.createGain();g.gain.value=0.25;o.connect(g);g.connect(lp);o.start();AB.nodes.push(o);AB.P.osc.push(o);});
+  AB.P.chord=-1;AB.P.chordAt=0;
+  AB.P.libertyG=abLayer('bandpass',700,1.2,0.4,160);AB.P.poolG=abLayer('bandpass',560,1.2,0.3,120);}
+function abProx(id,x,y,r){const d=DOOR[id];if(!d)return {p:0,pan:0};const dist=Math.hypot(d[0]-x,d[1]-y),p=Math.max(0,1-dist/r);return {p:p*p,pan:Math.max(-1,Math.min(1,(d[0]-x)/260))};}
+function abNear(x){const c=AU.ctx,P=AB.P,pl=G.player;if(!P||!P.church)return;const T=c.currentTime;
+  const here=x.place==='street'&&pl,sun=/Sunday/.test(G.clock||'');
+  const pc=here?abProx('church',pl.x,pl.y,ABP.church.r):{p:0},pp=here?abProx('pool',pl.x,pl.y,ABP.pool.r):{p:0},pu=here?abProx('liberty',pl.x,pl.y,ABP.liberty.r):{p:0},pb=here?abProx('library',pl.x,pl.y,ABP.library.r):{p:0};
+  P.church.gain.setTargetAtTime(sun?pc.p*0.16:0,T,0.5);P.libertyG.gain.setTargetAtTime(pu.p*(x.night?0.2:0.1),T,0.5);P.poolG.gain.setTargetAtTime(pp.p*0.1,T,0.5);
+  AB.bus.gain.setTargetAtTime(1-pb.p*0.35,T,0.6);                                   // the library door: the street drops a little, a hush
+  if(sun&&pc.p>0.02&&T>=P.chordAt){const CH=[[46,53,58,62],[51,58,63,67],[53,60,65,69],[46,53,58,62]];P.chord=(P.chord+1)%CH.length;P.chordAt=T+abR(5,7);
+    P.osc.forEach((o,i)=>o.frequency.setTargetAtTime(NT(CH[P.chord][i]),T,0.25));}
+  if(pp.p>0.04)abEvery('pool',1.3,4.5,t=>{const pn=abPan(pp.pan,AB.bus);abN(0.02,2800,5,'bandpass',0.35*pp.p,t,pn);tone(1500,0.03,0.04*pp.p,'sine',t,pn);if(Math.random()<0.5){abN(0.015,2300,5,'bandpass',0.25*pp.p,t+0.09,pn);}
+    if(Math.random()<0.15)abN(0.5,900,1,'bandpass',0.1*pp.p,t+0.3,pn);});                     // and a laugh of noise now and then
+  if(pu.p>0.04&&(x.night||/p\.m\./.test(G.clock||'')))abEvery('speaker',3,7,t=>{const f0=abR(105,135),n=Math.floor(abR(2,5));                       // a speaker's cadence behind the wall, no words
+    for(let i=0;i<n;i++){const w=t+i*0.42,s=c.createOscillator();s.type='sawtooth';s.frequency.setValueAtTime(f0*abR(1,1.2),w);s.frequency.linearRampToValueAtTime(f0*abR(0.8,1),w+0.36);
+      const f=c.createBiquadFilter();f.type='bandpass';f.frequency.value=700+abR(0,300);f.Q.value=2;const g=c.createGain();g.gain.setValueAtTime(0.0001,w);g.gain.linearRampToValueAtTime(0.03*pu.p,w+0.08);g.gain.linearRampToValueAtTime(0.0001,w+0.38);
+      const pn=abPan(pu.pan,AB.muf);s.connect(f);f.connect(g);g.connect(pn);s.start(w);s.stop(w+0.4);}});}
+// ---------- tension: the Day 2 policeman (the story reports his place through u3send('Cone', 'x|y|dir|seen')) ----------
+const AT={on:false,x:0,y:0,seen:0,gain:null,nodes:[],beat:0,alert:0};
+{const _us=u3send;u3send=function(fn,arg){if(fn==='Cone'){const v=(arg||'').split('|');if(v.length>=4){AT.on=true;AT.x=+v[0];AT.y=+v[1];AT.seen=+v[3];}else AT.on=false;}return _us(fn,arg);};}
+function abTenseStart(){const c=AU.ctx;AT.gain=c.createGain();AT.gain.gain.value=0;AT.gain.connect(AU.amb);const lp=c.createBiquadFilter();lp.type='lowpass';lp.frequency.value=240;lp.connect(AT.gain);
+  [55,58.3].forEach(f=>{const o=c.createOscillator();o.type='sawtooth';o.frequency.value=f;o.connect(lp);o.start();AT.nodes.push(o);});     // a low minor-second drone
+  const o=c.createOscillator();o.frequency.value=1760;const hg=c.createGain();hg.gain.value=0;o.connect(hg);hg.connect(AT.gain);o.start();AT.nodes.push(o);AT.hi=hg;}                    // a thin high whine that only comes when he sees you
+function abTenseStop(){const c=AU.ctx,n=AT.nodes,g=AT.gain;AT.nodes=[];AT.gain=null;if(g)g.gain.setTargetAtTime(0,c.currentTime,0.4);setTimeout(()=>{n.forEach(o=>{try{o.stop();}catch(e){}});try{g.disconnect();}catch(e){}},2500);}
+setInterval(()=>{if(!AU.on||!AU.ctx)return;const c=AU.ctx,pl=G.player,act=AT.on&&G.map&&G.map.cone&&G.mode==='play'&&pl;
+  if(!act){if(AT.gain)abTenseStop();return;}
+  if(!AT.gain)abTenseStart();const d=Math.hypot(AT.x-pl.x,AT.y-pl.y),lv=AT.seen?1:Math.max(0,Math.min(0.85,1-d/450)),T=c.currentTime;
+  AT.gain.gain.setTargetAtTime(0.02+lv*0.09,T,0.3);AT.hi.gain.setTargetAtTime(AT.seen?0.012:0,T,0.1);
+  if(T>=AT.beat){AT.beat=T+1.15-0.65*lv;const g=0.05+0.2*lv;tone(62,0.16,g,'sine',T+0.02,AT.gain,38);tone(55,0.14,g*0.7,'sine',T+0.2,AT.gain,34);}},100);   // a heartbeat that quickens as he nears
+// ---------- the party (Day 5): crowd laughter and glasses grow with the guests; Mrs. Odom's broom from below as the noise nears her limit; a sting when the police come ----------
+function abParty(x){if(!x.crowd||typeof PT==='undefined'||!PT||PT.over)return;const c=AU.ctx,g=x.guests,hush=x.hush;
+  if(g>6&&!hush)abEvery('laugh',Math.max(3,14-g*0.3),Math.max(6,26-g*0.5),t=>{const pn=abPan(abR(-0.8,0.8),AB.bus),n=Math.floor(abR(3,6)),f0=abR(200,300);   // somebody laughs: a few falling pulses
+    for(let i=0;i<n;i++){const w=t+i*0.13,o=c.createOscillator();o.type='sawtooth';o.frequency.setValueAtTime(f0*(1-i*0.05),w);const f=c.createBiquadFilter();f.type='bandpass';f.frequency.value=1000;f.Q.value=2;
+      const gg=c.createGain();gg.gain.setValueAtTime(0.0001,w);gg.gain.linearRampToValueAtTime(0.03,w+0.02);gg.gain.exponentialRampToValueAtTime(0.0001,w+0.11);o.connect(f);f.connect(gg);gg.connect(pn);o.start(w);o.stop(w+0.13);}});
+  if(g>10&&!hush)abEvery('glass',6,14,t=>{const pn=abPan(abR(-0.8,0.8),AB.bus);tone(abR(2400,3300),0.5,0.02,'sine',t,pn);tone(abR(3300,4200),0.35,0.012,'sine',t+0.03,pn);});
+  const r=PT.noise/Math.max(1,noiseLimit());
+  if(r>0.8)abEvery('broom',r>1?2.2:5.5,r>1?3.5:9,t=>{const k=Math.min(1.4,r),n=r>1?3:2;for(let i=0;i<n;i++){abN(0.09,160,1.2,'lowpass',0.45*k,t+i*0.17,AB.bus);tone(95,0.1,0.12*k,'sine',t+i*0.17,AB.bus,60);}});}   // the broom handle on her ceiling, below
+{const _sfx2=sfx;sfx=function(name){if(name==='whistle'&&AU.on&&AU.ctx&&G.map&&/^flat/.test(G.map.id||'')&&typeof PT!=='undefined'){const t=AU.ctx.currentTime;AB.hushUntil=t+8;   // police at the door: the room goes quiet
+    [[46,0],[47,0.02],[53,0.04],[59,0.05]].forEach(([n,d])=>tone(NT(n),1.6,0.09,'sawtooth',t+0.2+d,AU.sfx));nz(0.15,300,1,0.7,'lowpass',t+0.2);}
+  return _sfx2(name);};}
+// ---------- card stingers and ending music (own bus, so it is heard even when the story's music is switched off) ----------
+function abBusM(){const c=AU.ctx,g=c.createGain();g.gain.value=0.9*ABX.cue*AU.vol.music;const d=c.createDelay(0.5);d.delayTime.value=0.19;const fb=c.createGain();fb.gain.value=0.3;const wet=c.createGain();wet.gain.value=0.25;
+  g.connect(AU.master);g.connect(d);d.connect(fb);fb.connect(d);d.connect(wet);wet.connect(g);return g;}
+function abKey(f,w,g,dur,dest){const c=AU.ctx,o1=c.createOscillator(),o2=c.createOscillator(),gg=c.createGain(),g2=c.createGain();o1.type='triangle';o2.type='sine';o1.frequency.value=f;o2.frequency.value=f*2.003;g2.gain.value=0.35;
+  gg.gain.setValueAtTime(0.0001,w);gg.gain.exponentialRampToValueAtTime(g,w+0.008);gg.gain.exponentialRampToValueAtTime(g*0.3,w+0.25);gg.gain.exponentialRampToValueAtTime(0.0001,w+dur);
+  o1.connect(gg);o2.connect(g2);g2.connect(gg);gg.connect(dest);o1.start(w);o2.start(w);o1.stop(w+dur+0.05);o2.stop(w+dur+0.05);}
+function abPlay(seq,beat,dest,k){k=k||1;const t=AU.ctx.currentTime+0.15;let end=0;seq.forEach(([b,notes,len,g],i)=>{notes.forEach((n,i2)=>abKey(NT(n),t+b*beat+i2*0.025,(g||0.1)*k,(len||1)*beat*1.6,dest));end=Math.max(end,b+(len||1)*1.6);});return end*beat;}
+// card stinger: a day card gets a short ragtime flourish on top of the story's chime
+{const _card=card;card=function(o){if(AU.on&&AU.ctx&&o&&!o.sound){
+  if(o.k==='Harlem, New York'){const d=abBusM();abPlay([[0,[46,58],1,0.1],[0.5,[62,65],0.5,0.07],[1,[58,70],0.5,0.07],[1.5,[65,69,74],1,0.07],[2.5,[46,53,58,62,65],3,0.09]],0.3,d,0.75);setTimeout(()=>{try{d.disconnect();}catch(e){}},6000);}}
+  return _card(o);};}
+// endings: clean rent = a bright stride coda, rent owed = gospel plagal "amen", short = slow blues turnaround
+const ABE={
+ stride:[[0,[34,46],1],[0.5,[58,62,65],1],[1,[41,53],1],[1.5,[58,62,65],1],[2,[34,46],1],[2.5,[60,63,67],1],[3,[39,51],1],[3.5,[62,65,70],1],[4,[34,46],1],[4.5,[70,74,77],1,0.08],[5,[41,53],1],[5.5,[69,72,75],1,0.08],[6,[34,46,58,62,65,70],4,0.1],[6.5,[82],2,0.06],[7.5,[77],3,0.06]],
+ gospel:[[0,[46,58,62,65,70],3],[3,[51,58,63,67,70],3],[6,[46,58,62,65,70],3,0.1],[8,[74],2,0.06],[9,[53,60,65,69,72],3],[12,[51,58,63,67,70,75],3,0.1],[14,[46,58,62,65,70,74],7,0.11],[14.5,[77],3,0.06],[16.5,[74],6,0.05]],
+ blues:[[0,[46,56,60,63,65],3,0.09],[2,[73],2,0.06],[3,[70],1,0.06],[4,[68],2,0.06],[6,[51,56,60,63,66],3,0.09],[8,[70],2,0.05],[10,[46,56,60,63,65],3,0.09],[12,[75],2,0.05],[13,[73],2,0.05],[15,[53,59,63,65,69],3,0.09],[17,[46,53,58,62,65],8,0.08],[18,[70],6,0.05]]};
+{const _end=showEnd;showEnd=function(L){if(AU.on&&AU.ctx&&L){const kind={clean:'stride',string:'gospel',short:'blues'}[L.rent]||'gospel',d=abBusM(),mood=AU.mood;
+  setMusic('none');const len=abPlay(ABE[kind],kind==='stride'?0.3:kind==='gospel'?0.8:0.95,d,kind==='stride'?0.6:kind==='blues'?1.25:1);setTimeout(()=>{setMusic(mood==='none'?'quiet':mood);try{d.disconnect();}catch(e){}},len*1000+4000);}
+  return _end(L);};}
+// ---------- motifs on a character's first line (once each): Reese's stride, Vera's hymn, Idella's tune; and the title theme ----------
+const ABM={reese:[0.3,[[0,[34,46],1,0.06],[0.5,[58,62,65],0.5,0.045],[1,[41,53],1,0.06],[1.5,[58,62,65],0.5,0.045],[2,[34,46],1,0.06],[2.5,[72],0.5,0.04],[3,[70],0.5,0.04],[3.5,[68,46],1.5,0.05]]],
+ vera:[0.8,[[0,[46,58,62,65],3,0.05],[3,[51,58,63,67],3,0.05],[6,[46,58,62,65,70],4,0.05]]],
+ idella:[0.42,[[0,[67],1,0.05],[1,[70],1,0.05],[2,[72],1,0.05],[3,[70,55],1,0.05],[4,[67],1,0.05],[5,[63],1,0.05],[6,[67,51],3,0.05]]]};
+const abHeard={};
+function abMotif(k){const m=ABM[k];if(!m||!AU.on||!AU.ctx)return;const d=abBusM(),len=abPlay(m[1],m[0],d);setTimeout(()=>{try{d.disconnect();}catch(e){}},len*1000+4000);}
+{const _say=say;say=function(who){if(ABM[who]&&!abHeard[who]){abHeard[who]=1;setTimeout(()=>abMotif(who),700);}return _say.apply(this,arguments);};}
+{const _au=auSet;auSet=function(on){const r=_au(on);const t=document.getElementById('title');if(on&&AU.ctx&&!abHeard.title&&t&&!t.hidden){abHeard.title=1;
+  const d=abBusM(),len=abPlay([[0,[34,46],1,0.08],[1,[58,62,65],1,0.06],[2,[41,53],1,0.08],[3,[58,62,65,70],1,0.06],[4,[34,46],1,0.08],[5,[65],1,0.05],[5.5,[68],1,0.05],[6,[70],1,0.05],[7,[46,58,62,65,68],4,0.08]],0.4,d);setTimeout(()=>{try{d.disconnect();}catch(e){}},len*1000+4000);}return r;};}
+// key-scene motifs: Idella on the fire escape, Reese's stride when he plays the party piano, Vera's hymn on Sunday morning
+{const _bark=bark;bark=function(who,text){if(who==='reese'&&/Now you're talking|Bring it down/.test(text||''))abMotif('reese');return _bark.apply(this,arguments);};
+ const _sm2=setMap;setMap=function(m,s){const r=_sm2(m,s);if(m&&m.id==='fire')setTimeout(()=>abMotif('idella'),1500);else if(m&&/^flat/.test(m.id||'')&&/Sunday/.test(G.clock||'')&&!abHeard.veraSun){abHeard.veraSun=1;setTimeout(()=>abMotif('vera'),2500);}return r;};}
+// sfx bus level, and a soft limiter (tanh, ceiling 0.89 = -1 dBFS) on the master
+{const _aap=auApplyVol;auApplyVol=function(){_aap();if(AU.ctx&&AU.sfx){const t=AU.ctx.currentTime;AU.sfx.gain.setTargetAtTime(0.8*AU.vol.sfx*ABX.sfx,t,0.1);AU.amb.gain.setTargetAtTime(0.45*AU.vol.sfx*(AU.duck?ABX.da:1)*(AB.swell?1.3:1),t,AU.duck?0.08:AB.swell?0.15:0.6);AU.music.gain.setTargetAtTime(musicLevel(),t,AU.duck?0.08:0.5);}};
+ const _ai=auInit;auInit=function(){const had=!!AU.ctx,r=_ai();if(r&&!had){const c=AU.ctx,k=c.createWaveShaper(),cu=new Float32Array(4097);for(let i=0;i<4097;i++){const x=(i-2048)/2048;cu[i]=0.89*Math.tanh(x/0.89);}k.curve=cu;AU.master.disconnect();AU.master.connect(k);k.connect(c.destination);}return r;};}
+// voiced lines duck the music and ambience (the story ducks around each clip; a short hold stops the level pumping between lines)
+{const _ad=auDuck;let rel=0,on=0;auDuck=function(v){
+  if(v){clearTimeout(rel);if(AU.duck||on)return;on=setTimeout(()=>{on=0;_ad(true);},150);return;}   // a line with no recording never reaches the speaker: do not dip for it
+  clearTimeout(on);on=0;if(!AU.duck)return;clearTimeout(rel);
+  rel=setTimeout(()=>{_ad(false);if(AU.ctx&&AU.amb){AB.swell=1;auApplyVol();setTimeout(()=>{AB.swell=0;auApplyVol();},1100);}},350);};}   // the street swells back up when the line ends
+// ---------- Cal's breathing: only while sprinting with a load (the ice, crates, chairs); quiet, and it grows the longer he runs ----------
+const ABB={t:0,next:0};
+setInterval(()=>{if(!AU.on||!AU.ctx||G.mode!=='play'||!G.player)return;const p=G.player,now=performance.now();
+  if(!(p.moving&&G.running&&p.carry)){if(ABB.t>3000&&now>ABB.next&&AU.ctx)abBreath(1.5);ABB.t=0;return;}   // after a long run: one deep breath
+  if(!ABB.t)ABB.t=now-1;const run=Math.min(1,(now-ABB.t)/7000);
+  if(now<ABB.next)return;ABB.next=now+700-300*run+Math.random()*80;abBreath(0.6+0.5*run);},80);
+function abBreath(k){if(AU.duck)k*=0.35;   // under spoken lines, about -9 dB
+  const c=AU.ctx,t=c.currentTime+0.01,s=c.createBufferSource();s.buffer=AU.noise;const f=c.createBiquadFilter();f.type='bandpass';f.frequency.value=1300+Math.random()*300;f.Q.value=0.7;
+  const g=c.createGain();g.gain.setValueAtTime(0.0001,t);g.gain.linearRampToValueAtTime(0.06*k,t+0.07);g.gain.exponentialRampToValueAtTime(0.0001,t+0.26);s.connect(f);f.connect(g);g.connect(AU.sfx);s.start(t,Math.random()*1.5);s.stop(t+0.3);
+  tone(210,0.18,0.012*k,'sine',t+0.02,null,160);}   // a little voice behind the exhale
 
 })();
 </script></body></html>
